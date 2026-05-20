@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>History & Heritage – Camarines Norte Tourism</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style/styles.css">
+
+  <style>
+    /* ── Breadcrumb ── */
+    .breadcrumb-bar {
+      background: rgba(7,59,76,0.06);
+      border-bottom: 1px solid rgba(7,59,76,0.08);
+      padding: 12px 0;
+    }
+    .breadcrumb {
+      margin: 0;
+      font-size: 0.82rem;
+    }
+    .breadcrumb-item a {
+      color: var(--emerald);
+      text-decoration: none;
+    }
+    .breadcrumb-item a:hover { color: var(--emerald-light); }
+    .breadcrumb-item.active { color: var(--muted); }
+    .breadcrumb-item + .breadcrumb-item::before { color: var(--muted); }
+
+    /* ── Back button ── */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 8px 0;
+      border: none;
+      background: none;
+      transition: color 0.3s;
+      margin-bottom: 0;
+    }
+    .back-btn:hover { color: var(--emerald); }
+
+    /* ── Timeline ── */
+    .timeline { position: relative; padding-left: 0; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--emerald), var(--gold));
+    }
+    .timeline-item {
+      display: flex;
+      gap: 28px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .timeline-dot {
+      flex-shrink: 0;
+      width: 58px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      z-index: 2;
+    }
+    .timeline-circle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2.5px solid var(--emerald);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem;
+      box-shadow: 0 0 0 4px rgba(15,163,177,0.12);
+      flex-shrink: 0;
+    }
+    .timeline-year {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--gold);
+      white-space: nowrap;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+    .timeline-body {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 22px 26px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      flex: 1;
+      border-left: 3px solid var(--emerald);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .timeline-body:hover {
+      transform: translateX(4px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.11);
+    }
+    .timeline-body h5 {
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .timeline-body p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0;
+    }
+    .timeline-body .timeline-tag {
+      display: inline-block;
+      background: rgba(15,163,177,0.1);
+      color: var(--emerald);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 30px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Heritage Figures ── */
+    .figure-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      height: 100%;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-top: 3px solid var(--gold);
+    }
+    .figure-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 44px rgba(0,0,0,0.13);
+    }
+    .figure-icon {
+      font-size: 2.6rem;
+      margin-bottom: 14px;
+    }
+    .figure-card h5 {
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .figure-subtitle {
+      font-size: 0.78rem;
+      color: var(--emerald-light);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .figure-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    /* ── Fact Grid ── */
+    .fact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 576px) { .fact-grid { grid-template-columns: 1fr; } }
+    .fact-item {
+      background: var(--cream);
+      border-radius: 10px;
+      padding: 16px 18px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .fact-item i {
+      color: var(--emerald);
+      margin-top: 2px;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .fact-item-label {
+      font-size: 0.73rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+    .fact-item-value {
+      font-size: 0.9rem;
+      color: var(--dark);
+      font-weight: 500;
+    }
+
+    /* ── Heritage Sites ── */
+    .site-card {
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      height: 100%;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .site-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 44px rgba(0,0,0,0.13);
+    }
+    .site-card-banner {
+      height: 140px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+    }
+    .site-card-body { padding: 20px; }
+    .site-card-body h6 { font-size: 1rem; color: var(--dark); margin-bottom: 4px; }
+    .site-card-loc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex; align-items: center; gap: 4px;
+      margin-bottom: 10px;
+    }
+    .site-card-body p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin: 0; }
+
+    /* ── Culture Blocks ── */
+    .culture-block {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      padding: 22px;
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+      transition: transform 0.3s;
+    }
+    .culture-block:hover { transform: translateY(-3px); }
+    .culture-block-icon {
+      width: 50px; height: 50px; min-width: 50px;
+      background: linear-gradient(135deg, rgba(15,163,177,0.12), rgba(255,183,3,0.1));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+    }
+    .culture-block h6 {
+      font-size: 1rem;
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+    .culture-block p {
+      font-size: 0.87rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.65;
+    }
+
+    /* ── Quote Banner ── */
+    .quote-banner {
+      background: linear-gradient(135deg, #073b4c 0%, #0fa3b1 100%);
+      border-radius: 16px;
+      padding: 50px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .quote-banner::before {
+      content: '"';
+      position: absolute;
+      top: -20px; left: 20px;
+      font-family: 'Playfair Display', serif;
+      font-size: 14rem;
+      color: rgba(255,255,255,0.05);
+      line-height: 1;
+    }
+    .quote-banner blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      color: var(--white);
+      font-style: italic;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .quote-banner cite {
+      font-size: 0.85rem;
+      color: var(--gold-light);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* ── CTA strip ── */
+    .sub-cta {
+      background: var(--cream);
+      border-radius: 16px;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .sub-cta h4 {
+      font-size: 1.5rem;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .sub-cta p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .sub-cta-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    .btn-primary-cam {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--emerald);
+      color: var(--white);
+      padding: 12px 26px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .btn-primary-cam:hover {
+      background: var(--emerald-light);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+    .btn-outline-cam {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent;
+      color: var(--dark);
+      padding: 12px 26px;
+      border-radius: 8px;
+      border: 1.5px solid rgba(7,59,76,0.2);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .btn-outline-cam:hover {
+      border-color: var(--emerald);
+      color: var(--emerald);
+      background: rgba(15,163,177,0.05);
+    }
+
+    /* ── Spacing helpers ── */
+    .sub-section { padding: 72px 0; }
+    .sub-section.cream { background: var(--cream); }
+    .sub-section.dark-bg {
+      background: linear-gradient(135deg, #073b4c 0%, #118ab2 100%);
+    }
+
+    @media (max-width: 768px) {
+      .timeline::before { left: 17px; }
+      .timeline-body { padding: 16px 18px; }
+      .quote-banner { padding: 36px 24px; }
+      .sub-cta { flex-direction: column; text-align: center; }
+      .sub-cta-links { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="navbar navbar-expand-lg inner-page">
+  <div class="container">
+    <a class="nav-brand navbar-brand" href="index.html">Camarines<span>Norte</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="destinations.html">Destinations</a></li>
+        <li class="nav-item"><a class="nav-link" href="festivals.html">Festivals</a></li>
+        <li class="nav-item"><a class="nav-link" href="food.html">Food</a></li>
+        <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        <li class="nav-item"><a class="nav-link" href="tips.html">Travel Tips</a></li>
+        <li class="nav-item"><a class="nav-link" href="inquiry.html">Inquire</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="about.html">About</a></li>
+        <li class="breadcrumb-item active" aria-current="page">History &amp; Heritage</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container page-header-content">
+    <div class="page-badge"><i class="fas fa-landmark"></i> A Deep Dive into the Past</div>
+    <h1>History &amp; <em>Heritage</em></h1>
+    <p>From pre-colonial gold traders to modern-day eco-tourism — trace the rich and layered story of Camarines Norte through the centuries.</p>
+  </div>
+</div>
+
+<!-- ── QUICK FACTS ── -->
+<section class="sub-section">
+  <div class="container">
+    <div class="mb-2">
+      <a href="about.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to About the Province
+      </a>
+    </div>
+
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-5">
+        <span class="section-eyebrow">At a Glance</span>
+        <h2 class="section-title">Province <em>Quick Facts</em></h2>
+        <div class="divider"></div>
+        <p class="section-lead mb-4">
+          A compact but richly endowed province, Camarines Norte has played a significant role in Philippine history — from its pre-colonial gold trade to its pivotal place in Bicol's regional identity.
+        </p>
+        <div class="fact-grid">
+          <div class="fact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <div class="fact-item-label">Capital</div>
+              <div class="fact-item-value">Daet</div>
+            </div>
+          </div>
+          <div class="fact-item">
+            <i class="fas fa-globe-asia"></i>
+            <div>
+              <div class="fact-item-label">Region</div>
+              <div class="fact-item-value">Bicol (Region V)</div>
+            </div>
+          </div>
+          <div class="fact-item">
+            <i class="fas fa-calendar-alt"></i>
+            <div>
+              <div class="fact-item-label">Founded</div>
+              <div class="fact-item-value">1919 (as province)</div>
+            </div>
+          </div>
+          <div class="fact-item">
+            <i class="fas fa-ruler-combined"></i>
+            <div>
+              <div class="fact-item-label">Land Area</div>
+              <div class="fact-item-value">3,119 km²</div>
+            </div>
+          </div>
+          <div class="fact-item">
+            <i class="fas fa-users"></i>
+            <div>
+              <div class="fact-item-label">Population</div>
+              <div class="fact-item-value">~283,000+</div>
+            </div>
+          </div>
+          <div class="fact-item">
+            <i class="fas fa-city"></i>
+            <div>
+              <div class="fact-item-label">Municipalities</div>
+              <div class="fact-item-value">12</div>
+            </div>
+          </div>
+          <div class="fact-item">
+            <i class="fas fa-language"></i>
+            <div>
+              <div class="fact-item-label">Language</div>
+              <div class="fact-item-value">Bikol, Filipino, English</div>
+            </div>
+          </div>
+          <div class="fact-item">
+            <i class="fas fa-gem"></i>
+            <div>
+              <div class="fact-item-label">Nickname</div>
+              <div class="fact-item-value">The Gold Province</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <!-- Stat row -->
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-md-3">
+            <div class="about-stat">
+              <div class="about-stat-num">1573</div>
+              <div class="about-stat-label">Spanish Arrival</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="about-stat">
+              <div class="about-stat-num">346+</div>
+              <div class="about-stat-label">Years of History</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="about-stat">
+              <div class="about-stat-num">4</div>
+              <div class="about-stat-label">Major Eras</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="about-stat">
+              <div class="about-stat-num">12</div>
+              <div class="about-stat-label">Heritage Sites</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quote banner -->
+        <div class="quote-banner">
+          <blockquote>
+            "The gold of Paracale was known long before the Spaniards came — it was the heartbeat of a thriving pre-colonial civilization."
+          </blockquote>
+          <cite>— Philippine Historical Commission</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HISTORICAL TIMELINE ── -->
+<section class="sub-section cream">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow">Through the Ages</span>
+      <h2 class="section-title">Historical <em>Timeline</em></h2>
+      <div class="divider mx-auto"></div>
+      <p class="section-lead mx-auto text-center" style="max-width:580px;">
+        From ancient gold traders to resilient freedom fighters, each era left an indelible mark on the province's identity.
+      </p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="timeline">
+
+          <div class="timeline-item">
+            <div class="timeline-dot">
+              <div class="timeline-circle">⚱️</div>
+              <div class="timeline-year">Pre-1500s</div>
+            </div>
+            <div class="timeline-body">
+              <span class="timeline-tag">Pre-Colonial</span>
+              <h5>The Ancient Gold Coast</h5>
+              <p>Long before the Spanish arrived, the coastal communities of what is now Paracale were already engaged in active gold trading with neighboring islands and even as far as China and Borneo. Indigenous Bikolano settlers lived along river valleys and coastlines, farming, fishing, and mining. The gold of the Paracale coast made this region one of the wealthiest in pre-colonial Luzon.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot">
+              <div class="timeline-circle">⚔️</div>
+              <div class="timeline-year">1573</div>
+            </div>
+            <div class="timeline-body">
+              <span class="timeline-tag">Spanish Era</span>
+              <h5>Spanish Colonization Begins</h5>
+              <p>Spanish missionaries and soldiers enter the Bicol region, establishing parishes and colonial settlements. The area becomes part of the Alcaldía Mayor of Camarines under the Province of Ambos Camarines. The Spanish are immediately drawn to Paracale's gold and begin formalizing mining operations. Catholic churches, some still standing today, are built across the region.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot">
+              <div class="timeline-circle">⛏️</div>
+              <div class="timeline-year">1600s–1800s</div>
+            </div>
+            <div class="timeline-body">
+              <span class="timeline-tag">Colonial Period</span>
+              <h5>Three Centuries of Gold Mining</h5>
+              <p>The Paracale gold mines operate continuously under Spanish oversight, making Camarines Norte one of the most economically significant provinces in colonial Luzon. Over these centuries, Bikolano culture evolves — a unique blend of indigenous traditions and Catholic influences. Local crafts, language, and cuisine develop their distinctive character. Despite colonial hardships, communities remain resilient.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot">
+              <div class="timeline-circle">🏳️</div>
+              <div class="timeline-year">1896–1898</div>
+            </div>
+            <div class="timeline-body">
+              <span class="timeline-tag">Philippine Revolution</span>
+              <h5>The Cry for Freedom</h5>
+              <p>Camarines Norte sons and daughters join the Philippine Revolution against Spanish rule. Local Katipuneros rise up across the province, cutting off Spanish supply lines and establishing revolutionary councils. The province plays a supporting but crucial logistical role in the broader Bicol campaign for independence. The revolutionary spirit of this era remains a source of provincial pride.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot">
+              <div class="timeline-circle">🇺🇸</div>
+              <div class="timeline-year">1898–1946</div>
+            </div>
+            <div class="timeline-body">
+              <span class="timeline-tag">American Period</span>
+              <h5>A New Province is Born</h5>
+              <p>Under American administration, the province of Ambos Camarines is divided in 1919, formally creating Camarines Norte as an independent province with Daet as its capital. American-era infrastructure — roads, schools, and public buildings — begins to modernize the province. The public education system expands rapidly, and English becomes a language of instruction across schools.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot">
+              <div class="timeline-circle">🕊️</div>
+              <div class="timeline-year">1942–1945</div>
+            </div>
+            <div class="timeline-body">
+              <span class="timeline-tag">World War II</span>
+              <h5>Resistance & Liberation</h5>
+              <p>Japanese forces occupy Camarines Norte during World War II. Local guerrilla units organize in the mountains and forests, conducting resistance operations and protecting civilians. The province suffers significant hardship during the occupation. Liberation comes in 1945, and the resilience of Camarineño communities during this period is remembered in local history and annual commemorations.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot">
+              <div class="timeline-circle">🌿</div>
+              <div class="timeline-year">1970s–2000s</div>
+            </div>
+            <div class="timeline-body">
+              <span class="timeline-tag">Modern Era</span>
+              <h5>Economic Growth & Environmental Awareness</h5>
+              <p>Post-war reconstruction gives way to agricultural and mining growth. The province becomes a significant producer of coconut, abaca, and gold. As environmental consciousness rises globally, Camarines Norte begins balancing its mining heritage with conservation efforts. Coastal communities start recognizing the economic potential of their natural landscapes.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot">
+              <div class="timeline-circle">🏝️</div>
+              <div class="timeline-year">2010–Present</div>
+            </div>
+            <div class="timeline-body">
+              <span class="timeline-tag">Tourism Era</span>
+              <h5>The World Discovers Calaguas</h5>
+              <p>Social media and travel blogging put Calaguas Islands on the national and international map. Backpackers, beach lovers, and adventurers begin flocking to the province. The provincial government invests in tourism infrastructure, eco-tourism programs, and cultural heritage preservation. Camarines Norte emerges as one of Luzon's most exciting emerging destinations.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HERITAGE FIGURES ── -->
+<section class="sub-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow">Notable People</span>
+      <h2 class="section-title">Heroes &amp; Heritage <em>Figures</em></h2>
+      <div class="divider mx-auto"></div>
+      <p class="section-lead mx-auto text-center" style="max-width:560px;">
+        Camarines Norte has produced remarkable individuals whose contributions shaped the province, the region, and the nation.
+      </p>
+    </div>
+    <div class="row g-4">
+      <div class="col-sm-6 col-lg-3">
+        <div class="figure-card">
+          <div class="figure-icon">⚔️</div>
+          <h5>Bikolano Katipuneros</h5>
+          <div class="figure-subtitle">Revolutionary Heroes · 1896</div>
+          <p>Unnamed but many, the ordinary men and women of Camarines Norte who took up arms against Spanish colonialism, fueled by the ideals of Andres Bonifacio and a deep love of their homeland.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="figure-card">
+          <div class="figure-icon">🎓</div>
+          <h5>Daet's Educators</h5>
+          <div class="figure-subtitle">American-Era Teachers · Early 1900s</div>
+          <p>The Thomasites (American teachers) who arrived in Daet after 1901, and the local teachers who followed them, laid the foundation for Camarines Norte's strong educational tradition that continues today.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="figure-card">
+          <div class="figure-icon">🏛️</div>
+          <h5>Provincial Governors</h5>
+          <div class="figure-subtitle">Public Servants · 1919–Present</div>
+          <p>From the first governor after the 1919 creation of the province to present-day leadership, successive administrations have shaped the province's development, infrastructure, and growing tourism profile.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="figure-card">
+          <div class="figure-icon">🎨</div>
+          <h5>Bikolano Artisans</h5>
+          <div class="figure-subtitle">Cultural Keepers · Generations</div>
+          <p>The weavers, potters, gold craftsmen, and festival costume makers of Camarines Norte whose hands preserve and pass on the province's intangible cultural heritage from one generation to the next.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HERITAGE SITES ── -->
+<section class="sub-section cream">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow">Places of Memory</span>
+      <h2 class="section-title">Heritage <em>Sites to Visit</em></h2>
+      <div class="divider mx-auto"></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-sm-6 col-lg-4">
+        <div class="site-card">
+          <div class="site-card-banner" style="background:linear-gradient(135deg,#073b4c,#0fa3b1);">⛪</div>
+          <div class="site-card-body">
+            <h6>Saint John the Baptist Parish Church</h6>
+            <div class="site-card-loc"><i class="fas fa-map-marker-alt"></i> Daet, Camarines Norte</div>
+            <p>A centuries-old Catholic church in the heart of Daet, bearing architectural elements from the Spanish colonial era. A place of continuous worship and an anchor of the community's Catholic identity.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4">
+        <div class="site-card">
+          <div class="site-card-banner" style="background:linear-gradient(135deg,#1a6b4a,#0f3a26);">🏛️</div>
+          <div class="site-card-body">
+            <h6>Museo de Camarines Norte</h6>
+            <div class="site-card-loc"><i class="fas fa-map-marker-alt"></i> Daet, Camarines Norte</div>
+            <p>The provincial museum preserving artifacts, photographs, documents, and relics that tell the full story of Camarines Norte — from pre-colonial gold trading communities to the modern province.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4">
+        <div class="site-card">
+          <div class="site-card-banner" style="background:linear-gradient(135deg,#b8860b,#8b6914);">🗿</div>
+          <div class="site-card-body">
+            <h6>Daet Rizal Monument & Town Plaza</h6>
+            <div class="site-card-loc"><i class="fas fa-map-marker-alt"></i> Daet, Camarines Norte</div>
+            <p>One of the earliest Rizal monuments erected in the Philippines, standing in the Daet town plaza — a symbol of the province's early and fervent patriotism in honoring the national hero.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4">
+        <div class="site-card">
+          <div class="site-card-banner" style="background:linear-gradient(135deg,#5c3d1e,#8b5e3c);">⛏️</div>
+          <div class="site-card-body">
+            <h6>Paracale Gold Mining Heritage Sites</h6>
+            <div class="site-card-loc"><i class="fas fa-map-marker-alt"></i> Paracale, Camarines Norte</div>
+            <p>The artisanal gold mining sites of Paracale represent centuries of continuous mining tradition. Visiting these sites connects you to a way of life that has persisted from pre-colonial times to today.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4">
+        <div class="site-card">
+          <div class="site-card-banner" style="background:linear-gradient(135deg,#0f5e3d,#0a3d27);">🕊️</div>
+          <div class="site-card-body">
+            <h6>World War II Memorial Sites</h6>
+            <div class="site-card-loc"><i class="fas fa-map-marker-alt"></i> Various Municipalities</div>
+            <p>Scattered across Camarines Norte are sites commemorating the sacrifices of local guerrilla fighters and civilians during the Japanese occupation — quiet but powerful memorials to courage and loss.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4">
+        <div class="site-card">
+          <div class="site-card-banner" style="background:linear-gradient(135deg,#073b4c,#118ab2);">🏘️</div>
+          <div class="site-card-body">
+            <h6>Ancestral Houses of Daet</h6>
+            <div class="site-card-loc"><i class="fas fa-map-marker-alt"></i> Daet, Camarines Norte</div>
+            <p>A heritage walk through Old Daet reveals well-preserved ancestral homes from the Spanish and American periods — grand bahay na bato structures that speak of a prosperous colonial-era merchant class.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CULTURE & TRADITIONS ── -->
+<section class="sub-section">
+  <div class="container">
+    <div class="row g-5 align-items-start">
+      <div class="col-lg-5">
+        <span class="section-eyebrow">Living Heritage</span>
+        <h2 class="section-title">Culture &amp; <em>Traditions</em></h2>
+        <div class="divider"></div>
+        <p class="section-lead">
+          Camarines Norte's cultural identity is a vibrant tapestry woven from indigenous Bikolano roots, centuries of Catholic influence, and the enduring creativity of its people.
+        </p>
+        <div class="mt-4">
+          <span class="traditions-tag">Cañao Festival</span>
+          <span class="traditions-tag">Bikolano Weaving</span>
+          <span class="traditions-tag">Kalilayan Festival</span>
+          <span class="traditions-tag">Gold Panning</span>
+          <span class="traditions-tag">Paracale Regatta</span>
+          <span class="traditions-tag">Kaogma Festival</span>
+          <span class="traditions-tag">Simbang Gabi</span>
+          <span class="traditions-tag">Abaca Crafts</span>
+          <span class="traditions-tag">Patron Fiestas</span>
+          <span class="traditions-tag">Harana Tradition</span>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="d-flex flex-column gap-3">
+          <div class="culture-block">
+            <div class="culture-block-icon">🎭</div>
+            <div>
+              <h6>Festival Culture</h6>
+              <p>Every municipality in Camarines Norte erupts in color and music during its patron saint's feast day. The province-wide Kaogma Festival every May is the grandest celebration, featuring street dancing, pageants, and cultural performances that reflect Bikolano pride.</p>
+            </div>
+          </div>
+          <div class="culture-block">
+            <div class="culture-block-icon">🧵</div>
+            <div>
+              <h6>Abaca Weaving & Crafts</h6>
+              <p>The Bicol Region is the heartland of Philippine abaca production, and Camarines Norte artisans have perfected the art of weaving abaca fiber into intricate textiles, bags, mats, and decorative items — a sustainable craft with deep cultural roots.</p>
+            </div>
+          </div>
+          <div class="culture-block">
+            <div class="culture-block-icon">🙏</div>
+            <div>
+              <h6>Deep Catholic Faith</h6>
+              <p>The Catholic faith permeates every aspect of life in Camarines Norte — from the nine-day Simbang Gabi masses at Christmas to the solemn Lenten processions and the joyful fiestas that punctuate the annual calendar.</p>
+            </div>
+          </div>
+          <div class="culture-block">
+            <div class="culture-block-icon">⚓</div>
+            <div>
+              <h6>Maritime Traditions</h6>
+              <p>Coastal communities maintain centuries-old fishing traditions, from the construction of the traditional outrigger bangca to time-honored fishing techniques passed down through generations. The sea is not just a resource but a spiritual and cultural identity.</p>
+            </div>
+          </div>
+          <div class="culture-block">
+            <div class="culture-block-icon">🌶️</div>
+            <div>
+              <h6>Bikolano Culinary Heritage</h6>
+              <p>The bold, coconut-rich, fiery cuisine of Bicol — laing, Bicol Express, pinangat, kinunot — is not merely food but a cultural statement. Bikolanos cook with pride and passion, and sharing a meal is one of the deepest expressions of hospitality in the province.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── GOLD PROVINCE SPOTLIGHT ── -->
+<section class="sub-section cream">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="section-eyebrow">The Gold Province</span>
+      <h2 class="section-title">Paracale: <em>Gold Capital of the Philippines</em></h2>
+      <div class="divider mx-auto"></div>
+    </div>
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <p style="color:var(--muted);font-size:1rem;line-height:1.85;margin-bottom:20px;">
+          The municipality of Paracale has been extracting gold from its mountains and rivers for over 500 years — making it one of the longest continuously operating gold mining areas in Southeast Asia.
+        </p>
+        <p style="color:var(--muted);font-size:1rem;line-height:1.85;margin-bottom:20px;">
+          Pre-colonial traders from China and Borneo came to this coast specifically to barter for Paracale gold. Spanish colonizers formalized and expanded mining operations, and today artisanal miners continue the tradition using techniques that blend ancient methods with modest modern tools.
+        </p>
+        <p style="color:var(--muted);font-size:1rem;line-height:1.85;margin-bottom:28px;">
+          Visitors to Paracale can witness gold panning firsthand — and even try their hand at the traditional batea (wooden pan) method. It is one of the most unique cultural tourism experiences available in the entire Philippines.
+        </p>
+        <a href="destinations.html" class="btn-primary-cam">
+          <i class="fas fa-map-marker-alt"></i> Explore Paracale Destinations
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <div style="background:linear-gradient(135deg,#073b4c,#0fa3b1);border-radius:16px;padding:40px;color:white;">
+          <h4 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:20px;">⛏️ Gold Mining at a Glance</h4>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+              <span style="font-size:.9rem;color:rgba(255,255,255,0.75);">Mining History</span>
+              <span style="font-weight:600;color:var(--gold-light);">500+ years</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+              <span style="font-size:.9rem;color:rgba(255,255,255,0.75);">Mining Type</span>
+              <span style="font-weight:600;color:var(--gold-light);">Artisanal / Small-scale</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+              <span style="font-size:.9rem;color:rgba(255,255,255,0.75);">Traditional Tool</span>
+              <span style="font-weight:600;color:var(--gold-light);">Batea (wooden pan)</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+              <span style="font-size:.9rem;color:rgba(255,255,255,0.75);">Festival</span>
+              <span style="font-weight:600;color:var(--gold-light);">Gold Festival (June)</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:12px 0;">
+              <span style="font-size:.9rem;color:rgba(255,255,255,0.75);">Tourism Experience</span>
+              <span style="font-weight:600;color:var(--gold-light);">Gold panning tours</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPLORE MORE CTA ── -->
+<section class="sub-section">
+  <div class="container">
+    <div class="sub-cta">
+      <div>
+        <h4>Ready to Experience the Province?</h4>
+        <p>Explore our destinations, learn about its festivals, or send us an inquiry to plan your visit.</p>
+      </div>
+      <div class="sub-cta-links">
+        <a href="destinations.html" class="btn-primary-cam">
+          <i class="fas fa-map-marked-alt"></i> View Destinations
+        </a>
+        <a href="about.html" class="btn-outline-cam">
+          <i class="fas fa-arrow-left"></i> Back to About
+        </a>
+        <a href="inquiry.html" class="btn-outline-cam">
+          <i class="fas fa-envelope"></i> Inquire Now
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER PLACEHOLDER -->
+<div id="footerPlaceholder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="main.js"></script>
+<script>
+  // Highlight "About" as active nav link for this subpage
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+      if (link.getAttribute('href') === 'about.html') {
+        link.classList.add('active-link');
+      }
+    });
+    if (typeof renderFooter === 'function') renderFooter('footerPlaceholder');
+  });
+</script>
+
+</body>
+</html>
